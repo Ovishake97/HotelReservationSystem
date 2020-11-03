@@ -22,9 +22,10 @@ namespace HotelReservation
             }
             else if (hotelName.ToLower().Equals(LAKEWOOD.ToLower()))
             {
+                //Assigns rate according to weekday and weekends for individual hotels
                 if ((date.DayOfWeek == DayOfWeek.Saturday) || (date.DayOfWeek == DayOfWeek.Sunday))
                 {
-                    rate = 110;
+                    rate = 90;
                 }
                 else {
                     rate = 110;
@@ -35,7 +36,7 @@ namespace HotelReservation
             {
                 if ((date.DayOfWeek == DayOfWeek.Saturday) || (date.DayOfWeek == DayOfWeek.Sunday))
                 {
-                    rate = 160;
+                    rate = 50;
                 }
                 else
                 {
@@ -46,7 +47,7 @@ namespace HotelReservation
             {
                 if ((date.DayOfWeek == DayOfWeek.Saturday) || (date.DayOfWeek == DayOfWeek.Sunday))
                 {
-                    rate = 220;
+                    rate = 150;
                 }
                 else
                 {
@@ -60,6 +61,7 @@ namespace HotelReservation
             }
             return new HotelRepository(rate,hotelName);
         }
+        /// Gets the cheapest hotel for a given date range
         public HotelRepository GetCheapestHotel(string dt1,string dt2)
         {
             HotelRepository hotel = new HotelRepository();
@@ -68,16 +70,16 @@ namespace HotelReservation
             int total1=0, total2=0, total3=0;
             TimeSpan duration = date2.Subtract(date1);
             int length = Convert.ToInt32(duration.TotalDays);
-            for (DateTime date = date1; date <= date2; date.AddDays(1)) {
+            for (DateTime date = date1; date < date2; date=date.AddDays(1)) {
                 hotel = GetRate(date,LAKEWOOD);
                 total1 = total1 + hotel.rate;  
             }
-            for (DateTime date = date1; date <= date2; date.AddDays(1))
+            for (DateTime date = date1; date <date2; date=date.AddDays(1))
             {
                 hotel = GetRate(date, BRIDGEWOOD);
                 total2 = total2 + hotel.rate;
             }
-            for (DateTime date = date1; date <= date2; date.AddDays(1))
+            for (DateTime date = date1; date <date2; date=date.AddDays(1))
             {
                 hotel = GetRate(date, RIDGEWOOD);
                 total3 = total3 + hotel.rate;
@@ -95,12 +97,14 @@ namespace HotelReservation
             minRate /= length;
             return new HotelRepository(minRate, hotelName);
         }
+        /// Function used to calculate the minimun out of three numbers which is in turn implemented
+        /// to get the cheapest rate out of given hotels
         public Func<int, int, int, int> GetMinimum = (a, b, c) => {
-            if (a > b && a > c)
+            if (a <b && a < c)
             {
                 return a;
             }
-            else if (b > c && b > a)
+            else if (b < c && b < a)
             {
                 return b;
             }
