@@ -6,34 +6,32 @@ namespace HotelReservation
 {
    public class HotelRepository
     {
-        int rate;
-        public const string LAKEWOOD = "Lakewood";
-        public const string BRIDGEWOOD = "Bridgewood";
-        public const string RIDGEWOOD = "Ridgewood";
-        public int GetRate(string hotelName) {
-            
-                if (hotelName.Equals(String.Empty)) {
-                    throw new HotelReservationCustomException(HotelReservationCustomException.ExceptionType.EMPTY_VALUE, "Hotel name is empty");
-                }
-               else if (hotelName.ToLower().Equals(LAKEWOOD.ToLower()))
-                {
-                    rate = 110;
-                }
-                else if (hotelName.ToLower().Equals(BRIDGEWOOD.ToLower()))
-                {
-                    rate = 160;
-                }
-                else if (hotelName.ToLower().Equals(RIDGEWOOD.ToLower()))
-                {
-                    rate = 220;
-                }
-                
-                else {
-                    throw new HotelReservationCustomException(HotelReservationCustomException.ExceptionType.NO_SUCH_HOTEL, "No such hotel");
-                }
-                return rate;
-            }
-            
+        public int rate;
+        public string hotelName;
+        public HotelRepository() {
+            //default constructor
         }
+        public HotelRepository(int rate, string hotelName)
+        {
+            this.rate = rate;
+            this.hotelName = hotelName;
+        }
+        public override bool Equals(object obj) {
+            if (obj == null) {
+                return false;
+            }
+            if (!(obj is HotelRepository)) {
+                return false;
+            }
+            HotelRepository hotelRepository = (HotelRepository)obj;
+            return this.hotelName == hotelRepository.hotelName && this.rate == hotelRepository.rate;
+        }
+        public override int GetHashCode()
+        {
+            var res1 = this.rate.GetHashCode();
+            var res2 = this.hotelName.GetHashCode();
+            return res1 * res2;
+        }
+    }
     }
 
