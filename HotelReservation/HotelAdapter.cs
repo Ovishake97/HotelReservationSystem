@@ -68,16 +68,16 @@ namespace HotelReservation
             int total1=0, total2=0, total3=0;
             TimeSpan duration = date2.Subtract(date1);
             int length = Convert.ToInt32(duration.TotalDays);
-            for (DateTime date = date1; date <= date2; date.AddDays(1)) {
+            for (DateTime date = date1; date < date2; date=date.AddDays(1)) {
                 hotel = GetRate(date,LAKEWOOD);
                 total1 = total1 + hotel.rate;  
             }
-            for (DateTime date = date1; date <= date2; date.AddDays(1))
+            for (DateTime date = date1; date < date2; date=date.AddDays(1))
             {
                 hotel = GetRate(date, BRIDGEWOOD);
                 total2 = total2 + hotel.rate;
             }
-            for (DateTime date = date1; date <= date2; date.AddDays(1))
+            for (DateTime date = date1; date < date2; date=date.AddDays(1))
             {
                 hotel = GetRate(date, RIDGEWOOD);
                 total3 = total3 + hotel.rate;
@@ -96,11 +96,11 @@ namespace HotelReservation
             return new HotelRepository(minRate, hotelName);
         }
         public Func<int, int, int, int> GetMinimum = (a, b, c) => {
-            if (a > b && a > c)
+            if (a < b && a < c)
             {
                 return a;
             }
-            else if (b > c && b > a)
+            else if (b < c && b < a)
             {
                 return b;
             }
