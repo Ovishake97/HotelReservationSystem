@@ -19,7 +19,7 @@ namespace MSTest
         [TestMethod]
         public void EntersDateGetsCheapestHotel()
         {
-            HotelRepository expectedObject = new HotelRepository(110, "Lakewood");
+            HotelRepository expectedObject = new HotelRepository(110, "Lakewood",3);
             expected.Add(expectedObject);
             actual = hotel.GetCheapestHotel("14Dec2020", "18Dec2020");
             expected.Equals(actual);
@@ -28,8 +28,8 @@ namespace MSTest
         /// for weekdays and weekends
         [TestMethod]
         public void EntersDateGetsCheapestHotel_Weekday_And_Weekend() {
-            HotelRepository expected1 = new HotelRepository(110, "Bridgewood");
-            HotelRepository expected2 = new HotelRepository(110, "Lakewood");
+            HotelRepository expected1 = new HotelRepository(110, "Bridgewood",4);
+            HotelRepository expected2 = new HotelRepository(110, "Lakewood",3);
             expected.Add(expected1);
             expected.Add(expected2);
              actual = hotel.GetCheapestHotel("11Sep2020", "12Sep2020");
