@@ -4,6 +4,7 @@ using System.Text;
 
 namespace HotelReservation
 {
+    /// Defining custom exceptions for the program
     public class HotelReservationCustomException : Exception
     {
         public enum ExceptionType

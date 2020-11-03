@@ -6,31 +6,17 @@ namespace MSTest
     [TestClass]
     public class UnitTest1
     {
-        HotelReservation.HotelRepository hotel = null;
+        HotelReservation.HotelAdapter hotel = null;
         [TestInitialize]
         public void SetUp() {
-            hotel = new HotelReservation.HotelRepository();
+            hotel = new HotelReservation.HotelAdapter();
         }
         [TestMethod]
-        public void GivenHotelNameReturnsRate()
+        public void EntersDateGetsCheapestHotel()
         {
-            //Act
-            int actual = hotel.GetRate("Bridgewood");
-            int expected = 160;
-            //Assert
+            HotelRepository expected = new HotelRepository(110, "Lakewood");
+            HotelRepository actual = hotel.GetCheapestHotel("2018/03/18", "2018/03/27");
             Assert.AreEqual(expected, actual);
-        }
-        [TestMethod]
-        public void GivenWrongHotelNameReturnsException() {
-            try
-            {
-                //Act
-                int result = hotel.GetRate("Greenwood");
-            }
-            catch (HotelReservationCustomException exception) {
-                //Assert
-                Assert.AreEqual("No such hotel", exception.Message);
-            }
         }
     }
 }
