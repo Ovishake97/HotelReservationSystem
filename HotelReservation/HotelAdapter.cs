@@ -62,8 +62,10 @@ namespace HotelReservation
             return new HotelRepository(rate,hotelName);
         }
         /// Gets the cheapest hotel for a given date range
-        public HotelRepository GetCheapestHotel(string dt1,string dt2)
+        public List<HotelRepository> GetCheapestHotel(string dt1,string dt2)
         {
+            //Defining a list to store the list of cheapest hotel(s)
+            List<HotelRepository> hotels = new List<HotelRepository>();
             HotelRepository hotel = new HotelRepository();
             DateTime date1 = Convert.ToDateTime(dt1);
             DateTime date2 = Convert.ToDateTime(dt2);
@@ -84,18 +86,19 @@ namespace HotelReservation
                 hotel = GetRate(date, RIDGEWOOD);
                 total3 = total3 + hotel.rate;
             }
-            int minRate = GetMinimum(total1, total2, total3);
-            if (minRate == total1) {
-                hotelName = LAKEWOOD;
+            int minTotalRate = GetMinimum(total1, total2, total3);
+            int minRate = minTotalRate / length;
+            if (minTotalRate == total1) {
+                hotels.Add(new HotelRepository(minRate, LAKEWOOD));
             }
-            else if (minRate == total2) {
-                hotelName = BRIDGEWOOD;
+            else if (minTotalRate == total2) {
+                hotels.Add(new HotelRepository(minRate, BRIDGEWOOD));
             }
             else {
-                hotelName = RIDGEWOOD;
+                hotels.Add(new HotelRepository(minRate, RIDGEWOOD));
             }
-            minRate /= length;
-            return new HotelRepository(minRate, hotelName);
+
+            return hotels;
         }
         /// Function used to calculate the minimun out of three numbers which is in turn implemented
         /// to get the cheapest rate out of given hotels
