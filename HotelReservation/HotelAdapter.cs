@@ -15,7 +15,7 @@ namespace HotelReservation
         public const string RIDGEWOOD = "Ridgewood";
         public HotelRepository GetRate(DateTime date ,string hotelName)
         {
-
+            int hotelRate = 0;
             if (hotelName.Equals(String.Empty))
             {
                 throw new HotelReservationCustomException(HotelReservationCustomException.ExceptionType.EMPTY_VALUE, "Hotel name is empty");
@@ -26,9 +26,11 @@ namespace HotelReservation
                 if ((date.DayOfWeek == DayOfWeek.Saturday) || (date.DayOfWeek == DayOfWeek.Sunday))
                 {
                     rate = 90;
+                    hotelRate = 3;
                 }
                 else {
                     rate = 110;
+                    hotelRate = 3;
                 }
                 
             }
@@ -37,10 +39,12 @@ namespace HotelReservation
                 if ((date.DayOfWeek == DayOfWeek.Saturday) || (date.DayOfWeek == DayOfWeek.Sunday))
                 {
                     rate = 50;
+                    hotelRate = 4;
                 }
                 else
                 {
                     rate = 160;
+                    hotelRate = 4;
                 }
             }
             else if (hotelName.ToLower().Equals(RIDGEWOOD.ToLower()))
@@ -48,10 +52,12 @@ namespace HotelReservation
                 if ((date.DayOfWeek == DayOfWeek.Saturday) || (date.DayOfWeek == DayOfWeek.Sunday))
                 {
                     rate = 150;
+                    hotelRate = 5;
                 }
                 else
                 {
                     rate = 220;
+                    hotelRate = 5;
                 }
             }
           
@@ -59,7 +65,7 @@ namespace HotelReservation
             {
                 throw new HotelReservationCustomException(HotelReservationCustomException.ExceptionType.NO_SUCH_HOTEL, "No such hotel");
             }
-            return new HotelRepository(rate,hotelName);
+            return new HotelRepository(rate,hotelName,hotelRate);
         }
         /// Gets the cheapest hotel for a given date range
         public List<HotelRepository> GetCheapestHotel(string dt1,string dt2)
@@ -93,13 +99,13 @@ namespace HotelReservation
             int minTotalRate = GetMinimum(total1, total2, total3);
             int minRate = minTotalRate / length;
             if (minTotalRate == total1) {
-                hotels.Add(new HotelRepository(minRate, LAKEWOOD));
+                hotels.Add(new HotelRepository(minRate, LAKEWOOD,3));
             }
             else if (minTotalRate == total2) {
-                hotels.Add(new HotelRepository(minRate, BRIDGEWOOD));
+                hotels.Add(new HotelRepository(minRate, BRIDGEWOOD,4));
             }
             else {
-                hotels.Add(new HotelRepository(minRate, RIDGEWOOD));
+                hotels.Add(new HotelRepository(minRate, RIDGEWOOD,5));
             }
 
             return hotels;
