@@ -74,12 +74,16 @@ namespace HotelReservation
                 hotel = GetRate(date,LAKEWOOD);
                 total1 = total1 + hotel.rate;  
             }
+
             for (DateTime date = date1; date <date2; date=date.AddDays(1))
+
             {
                 hotel = GetRate(date, BRIDGEWOOD);
                 total2 = total2 + hotel.rate;
             }
+
             for (DateTime date = date1; date <date2; date=date.AddDays(1))
+
             {
                 hotel = GetRate(date, RIDGEWOOD);
                 total3 = total3 + hotel.rate;
@@ -100,7 +104,9 @@ namespace HotelReservation
         /// Function used to calculate the minimun out of three numbers which is in turn implemented
         /// to get the cheapest rate out of given hotels
         public Func<int, int, int, int> GetMinimum = (a, b, c) => {
+
             if (a <b && a < c)
+
             {
                 return a;
             }
