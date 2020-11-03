@@ -15,7 +15,7 @@ namespace MSTest
         public void EntersDateGetsCheapestHotel()
         {
             HotelRepository expected = new HotelRepository(110, "Lakewood");
-            HotelRepository actual = hotel.GetCheapestHotel("2018/03/18", "2018/03/27");
+            HotelRepository actual = hotel.GetCheapestHotel("10Dec2020", "20Dec2020");
             Assert.AreEqual(expected, actual);
         }
     }
