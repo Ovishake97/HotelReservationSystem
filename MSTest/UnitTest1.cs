@@ -12,27 +12,24 @@ namespace MSTest
         public void SetUp() {
             hotel = new HotelReservation.HotelAdapter();
         }
-        /// It is tested whether the GetCheapestHotel() method
-        /// is retruning the best rated and cheapest hotel for the given daterange
+        /// Checking whether the GetCheapestHotel() method returns
+        /// correct object
         [TestMethod]
-        public void EntersDateGetsCheapestHotel()
-        {
-            //Act
-            HotelRepository expected = new HotelRepository(200, "Bridgewood", 4);
-            HotelRepository actual = hotel.GetCheapestHotel("11Sep2020", "12Sep2020");
-            //Assert
+        public void EntersRewardCustomerGetsCheapestBestRatedHotel() {
+            HotelRepository expected = new HotelRepository(140, "Ridgewood", 5);
+            HotelRepository actual = hotel.GetCheapestHotel("Reward", "11Sep2020", "12Sep2020");
             expected.Equals(actual);
         }
-        /// It is tested whether the GetBestRatedHotel() method
-        /// is retruning the best rated hotel for the given daterange
+        /// Checking whether the exception thrown upon entering
+        /// a different customer type throws the defined custom exception
         [TestMethod]
-        public void EntersDateGetsBestRatedHotel()
-        {
-            //Act
-            HotelRepository expected = new HotelRepository(370, "Ridgewood", 5);
-            HotelRepository actual = hotel.GetBestRatedHotel("11Sep2020", "12Sep2020");
-            //Assert
-            expected.Equals(actual);
+        public void EntersWrongCustomerTypeThrowsException() {
+            try {
+                HotelRepository result = hotel.GetCheapestHotel("Special", "11Sep2020", "12Sep2020");
+            }
+            catch (HotelReservationCustomException exception) {
+                Assert.AreEqual(exception.Message, "No such customer type");
+            }
         }
     }
 }
