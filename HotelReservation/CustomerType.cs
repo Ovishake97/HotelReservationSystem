@@ -4,7 +4,10 @@ using System.Text;
 
 namespace HotelReservation
 {
-    class CustomerType
+    /// Defined an enum to store the customer type
+    public enum CustomerType
     {
+        REGULAR,
+        REWARD
     }
 }

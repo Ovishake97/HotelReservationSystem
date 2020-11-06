@@ -18,66 +18,128 @@ namespace HotelReservation
         public const int RIDGEWOOD_RATINGS = 5;
         /// Method to get the rate of a hotel
         /// in a certain range of dates
-        public HotelRepository GetRate(DateTime date ,string hotelName)
+        public HotelRepository GetRate(CustomerType type, DateTime date ,string hotelName)
         {
             int hotelRate = 0;
             if (hotelName.Equals(String.Empty))
             {
                 throw new HotelReservationCustomException(HotelReservationCustomException.ExceptionType.EMPTY_VALUE, "Hotel name is empty");
             }
-            else if (hotelName.ToLower().Equals(LAKEWOOD.ToLower()))
+            if (type == CustomerType.REGULAR)
             {
-                hotelRate = LAKEWOOD_RATINGS;
-                //Assigns rate according to weekday and weekends for individual hotels
-                if ((date.DayOfWeek == DayOfWeek.Saturday) || (date.DayOfWeek == DayOfWeek.Sunday))
+                if (hotelName.ToLower().Equals(LAKEWOOD.ToLower()))
                 {
-                    rate = 90;
-                    
+                    hotelRate = LAKEWOOD_RATINGS;
+                    //Assigns rate according to weekday and weekends for individual hotels
+                    if ((date.DayOfWeek == DayOfWeek.Saturday) || (date.DayOfWeek == DayOfWeek.Sunday))
+                    {
+                        rate = 90;
+
+                    }
+                    else
+                    {
+                        rate = 110;
+
+                    }
+
                 }
-                else {
-                    rate = 110;
-                    
-                }
-                
-            }
-            else if (hotelName.ToLower().Equals(BRIDGEWOOD.ToLower()))
-            {
-                hotelRate = BRIDGEWOOD_RATINGS;
-                if ((date.DayOfWeek == DayOfWeek.Saturday) || (date.DayOfWeek == DayOfWeek.Sunday))
+                else if (hotelName.ToLower().Equals(BRIDGEWOOD.ToLower()))
                 {
-                    rate = 50;
-                    
+                    hotelRate = BRIDGEWOOD_RATINGS;
+                    if ((date.DayOfWeek == DayOfWeek.Saturday) || (date.DayOfWeek == DayOfWeek.Sunday))
+                    {
+                        rate = 50;
+
+                    }
+                    else
+                    {
+                        rate = 150;
+
+                    }
                 }
+                else if (hotelName.ToLower().Equals(RIDGEWOOD.ToLower()))
+                {
+                    hotelRate = RIDGEWOOD_RATINGS;
+                    if ((date.DayOfWeek == DayOfWeek.Saturday) || (date.DayOfWeek == DayOfWeek.Sunday))
+                    {
+                        rate = 150;
+
+                    }
+                    else
+                    {
+                        rate = 220;
+
+                    }
+                }
+
                 else
                 {
-                    rate = 150;
-                    
+                    throw new HotelReservationCustomException(HotelReservationCustomException.ExceptionType.NO_SUCH_HOTEL, "No such hotel");
                 }
+
             }
-            else if (hotelName.ToLower().Equals(RIDGEWOOD.ToLower()))
+            else if (type == CustomerType.REWARD)
             {
-                hotelRate = RIDGEWOOD_RATINGS;
-                if ((date.DayOfWeek == DayOfWeek.Saturday) || (date.DayOfWeek == DayOfWeek.Sunday))
+                if (hotelName.ToLower().Equals(LAKEWOOD.ToLower()))
                 {
-                    rate = 150;
-                    
+                    hotelRate = LAKEWOOD_RATINGS;
+                    //Assigns rate according to weekday and weekends for individual hotels
+                    if ((date.DayOfWeek == DayOfWeek.Saturday) || (date.DayOfWeek == DayOfWeek.Sunday))
+                    {
+                        rate = 80;
+
+                    }
+                    else
+                    {
+                        rate = 80;
+
+                    }
+
                 }
+                else if (hotelName.ToLower().Equals(BRIDGEWOOD.ToLower()))
+                {
+                    hotelRate = BRIDGEWOOD_RATINGS;
+                    if ((date.DayOfWeek == DayOfWeek.Saturday) || (date.DayOfWeek == DayOfWeek.Sunday))
+                    {
+                        rate = 50;
+
+                    }
+                    else
+                    {
+                        rate = 110;
+
+                    }
+                }
+                else if (hotelName.ToLower().Equals(RIDGEWOOD.ToLower()))
+                {
+                    hotelRate = RIDGEWOOD_RATINGS;
+                    if ((date.DayOfWeek == DayOfWeek.Saturday) || (date.DayOfWeek == DayOfWeek.Sunday))
+                    {
+                        rate = 40;
+
+                    }
+                    else
+                    {
+                        rate = 110;
+
+                    }
+                }
+
                 else
                 {
-                    rate = 220;
-                    
+                    throw new HotelReservationCustomException(HotelReservationCustomException.ExceptionType.NO_SUCH_HOTEL, "No such hotel");
                 }
             }
-          
-            else
-            {
-                throw new HotelReservationCustomException(HotelReservationCustomException.ExceptionType.NO_SUCH_HOTEL, "No such hotel");
+            else {
+                throw new HotelReservationCustomException(HotelReservationCustomException.ExceptionType.NO_SUCH_CUSTOMER_TYPE, "No such customer type");
             }
+            
             return new HotelRepository(rate,hotelName,hotelRate);
         }
         /// Gets the cheapest hotel for a given date range
-        public HotelRepository GetCheapestHotel(string dt1,string dt2)
+        public HotelRepository GetCheapestHotel(string customerType ,string dt1,string dt2)
         {
+            CustomerType type = GetCustomerType(customerType);
             //Defining a list to store the list of cheapest hotel(s)
             List<HotelRepository> hotels = new List<HotelRepository>();
             HotelRepository hotel = new HotelRepository();
@@ -87,17 +149,17 @@ namespace HotelReservation
             TimeSpan duration = date2.Subtract(date1);
             int length = Convert.ToInt32(duration.TotalDays);
             for (DateTime date = date1; date <= date2; date=date.AddDays(1)) {
-                hotel = GetRate(date,LAKEWOOD);
+                hotel = GetRate(type,date,LAKEWOOD);
                 total1 = total1 + hotel.rate;  
             }
             for (DateTime date = date1; date <=date2; date=date.AddDays(1))
             {
-                hotel = GetRate(date, BRIDGEWOOD);
+                hotel = GetRate(type,date, BRIDGEWOOD);
                 total2 = total2 + hotel.rate;
             }
             for (DateTime date = date1; date <=date2; date=date.AddDays(1))
             {
-                hotel = GetRate(date, RIDGEWOOD);
+                hotel = GetRate(type,date, RIDGEWOOD);
                 total3 = total3 + hotel.rate;
             }
             int minTotalRate = GetMinimum(total1, total2, total3);
@@ -129,7 +191,10 @@ namespace HotelReservation
             }
             return new HotelRepository(minRate,hotelName,hotelRate);
         }
-        public HotelRepository GetBestRatedHotel(string dt1, string dt2) {
+        /// Method defined to return the best rated hotel 
+        /// for a given date range
+        public HotelRepository GetBestRatedHotel(string customerType, string dt1, string dt2) {
+            CustomerType type = GetCustomerType(customerType);
             HotelRepository hotel = new HotelRepository();
             List<int> hotelRatings = new List<int>();
             DateTime date1 = Convert.ToDateTime(dt1);
@@ -137,19 +202,19 @@ namespace HotelReservation
             int total1 = 0, total2 = 0, total3 = 0;
             for (DateTime date = date1; date <= date2; date = date.AddDays(1))
             {
-                hotel = GetRate(date, LAKEWOOD);
+                hotel = GetRate(type,date, LAKEWOOD);
                 total1 = total1 + hotel.rate;
                 hotelRatings.Add(hotel.hotelRating);
             }
             for (DateTime date = date1; date <= date2; date = date.AddDays(1))
             {
-                hotel = GetRate(date, BRIDGEWOOD);
+                hotel = GetRate(type,date, BRIDGEWOOD);
                 total2 = total2 + hotel.rate;
                 hotelRatings.Add(hotel.hotelRating);
             }
             for (DateTime date = date1; date <= date2; date = date.AddDays(1))
             {
-                hotel = GetRate(date, RIDGEWOOD);
+                hotel = GetRate(type,date, RIDGEWOOD);
                 total3 = total3 + hotel.rate;
                 hotelRatings.Add(hotel.hotelRating);
             }
@@ -187,5 +252,18 @@ namespace HotelReservation
         public Func<List<int>,int> GetMaximum= (arr) => {
             return arr.Max();
         };
+        public CustomerType GetCustomerType(string type) {
+            if (type.ToLower().Equals("regular"))
+            {
+                return CustomerType.REGULAR;
+            }
+            else if (type.ToLower().Equals("reward"))
+            {
+                return CustomerType.REWARD;
+            }
+            else {
+                throw new HotelReservationCustomException(HotelReservationCustomException.ExceptionType.NO_SUCH_CUSTOMER_TYPE, "No such customer type");
+            }
+        }
     }
 }

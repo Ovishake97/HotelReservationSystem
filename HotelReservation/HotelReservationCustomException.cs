@@ -10,7 +10,8 @@ namespace HotelReservation
         public enum ExceptionType
         {
             NO_SUCH_HOTEL,
-            EMPTY_VALUE
+            EMPTY_VALUE,
+            NO_SUCH_CUSTOMER_TYPE
         }
         public ExceptionType type;
 
