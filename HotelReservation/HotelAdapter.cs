@@ -25,6 +25,7 @@ namespace HotelReservation
             {
                 throw new HotelReservationCustomException(HotelReservationCustomException.ExceptionType.EMPTY_VALUE, "Hotel name is empty");
             }
+            //Adding the data for regular customers
             if (type == CustomerType.REGULAR)
             {
                 if (hotelName.ToLower().Equals(LAKEWOOD.ToLower()))
@@ -78,6 +79,7 @@ namespace HotelReservation
                 }
 
             }
+            //Adding the data for reward customer
             else if (type == CustomerType.REWARD)
             {
                 if (hotelName.ToLower().Equals(LAKEWOOD.ToLower()))
@@ -252,6 +254,7 @@ namespace HotelReservation
         public Func<List<int>,int> GetMaximum= (arr) => {
             return arr.Max();
         };
+        /// Method to return the customer type
         public CustomerType GetCustomerType(string type) {
             if (type.ToLower().Equals("regular"))
             {
