@@ -13,11 +13,19 @@ namespace MSTest
             hotel = new HotelReservation.HotelAdapter();
         }
         /// Checking whether the GetCheapestHotel() method returns
-        /// correct object
+        /// correct object for reward customer
         [TestMethod]
         public void EntersRewardCustomerGetsCheapestBestRatedHotel() {
             HotelRepository expected = new HotelRepository(140, "Ridgewood", 5);
             HotelRepository actual = hotel.GetCheapestHotel("Reward", "11Sep2020", "12Sep2020");
+            expected.Equals(actual);
+        }
+        // Checking whether the GetCheapestHotel() method returns
+        /// correct object for regular customer
+        [TestMethod]
+        public void EnterRegularCustomerGetsCheapestBestRatedHotel() {
+            HotelRepository expected = new HotelRepository(200, "Bridgewood", 4);
+            HotelRepository actual = hotel.GetCheapestHotel("Regular", "11Sep2020", "12Sep2020");
             expected.Equals(actual);
         }
         /// Checking whether the exception thrown upon entering
