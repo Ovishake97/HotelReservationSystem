@@ -13,6 +13,8 @@ namespace HotelReservation
         public const string LAKEWOOD = "Lakewood";
         public const string BRIDGEWOOD = "Bridgewood";
         public const string RIDGEWOOD = "Ridgewood";
+        /// Method to get the rate of a hotel
+        /// in a certain range of dates
         public HotelRepository GetRate(DateTime date ,string hotelName)
         {
             int hotelRate = 0;
@@ -43,7 +45,7 @@ namespace HotelReservation
                 }
                 else
                 {
-                    rate = 160;
+                    rate = 150;
                     hotelRate = 4;
                 }
             }
@@ -68,7 +70,7 @@ namespace HotelReservation
             return new HotelRepository(rate,hotelName,hotelRate);
         }
         /// Gets the cheapest hotel for a given date range
-        public List<HotelRepository> GetCheapestHotel(string dt1,string dt2)
+        public HotelRepository GetCheapestHotel(string dt1,string dt2)
         {
             //Defining a list to store the list of cheapest hotel(s)
             List<HotelRepository> hotels = new List<HotelRepository>();
@@ -78,16 +80,16 @@ namespace HotelReservation
             int total1=0, total2=0, total3=0;
             TimeSpan duration = date2.Subtract(date1);
             int length = Convert.ToInt32(duration.TotalDays);
-            for (DateTime date = date1; date < date2; date=date.AddDays(1)) {
+            for (DateTime date = date1; date <= date2; date=date.AddDays(1)) {
                 hotel = GetRate(date,LAKEWOOD);
                 total1 = total1 + hotel.rate;  
             }
-            for (DateTime date = date1; date <date2; date=date.AddDays(1))
+            for (DateTime date = date1; date <=date2; date=date.AddDays(1))
             {
                 hotel = GetRate(date, BRIDGEWOOD);
                 total2 = total2 + hotel.rate;
             }
-            for (DateTime date = date1; date <date2; date=date.AddDays(1))
+            for (DateTime date = date1; date <=date2; date=date.AddDays(1))
             {
                 hotel = GetRate(date, RIDGEWOOD);
                 total3 = total3 + hotel.rate;
@@ -97,29 +99,49 @@ namespace HotelReservation
             if (minTotalRate == total1) {
                 hotels.Add(new HotelRepository(minRate, LAKEWOOD,3));
             }
-            else if (minTotalRate == total2) {
+            if (minTotalRate == total2) {
                 hotels.Add(new HotelRepository(minRate, BRIDGEWOOD,4));
             }
-            else {
+            if (minTotalRate == total3)
+            {
                 hotels.Add(new HotelRepository(minRate, RIDGEWOOD,5));
             }
-
-            return hotels;
+            int hotelRate=0;
+            List<int> hotelRatings = new List<int>(); 
+            foreach (HotelRepository elements in hotels) {
+                hotelRatings.Add(elements.hotelRating);
+                }
+            hotelRate = GetMaximum(hotelRatings);
+            switch (hotelRate) {
+                case 3: hotelName = LAKEWOOD;
+                    break;
+                case 4: hotelName = BRIDGEWOOD;
+                    break;
+                case 5: hotelName = RIDGEWOOD;
+                    break;
+                default: break;
+            }
+            return new HotelRepository(minRate,hotelName,hotelRate);
         }
         /// Function used to calculate the minimun out of three numbers which is in turn implemented
         /// to get the cheapest rate out of given hotels
         public Func<int, int, int, int> GetMinimum = (a, b, c) => {
-            if (a <b && a < c)
+            if ((a <b && a < c)||(a==b && a<c)||(a<b && a==c))
             {
                 return a;
             }
-            else if (b < c && b < a)
+            else if ((b < c && b < a)||(b==a && b<c)||(b==c && b<a))
             {
                 return b;
             }
             else {
                 return c;
             }
+        };
+        /// Function used to get the maximum out of an array which is
+        /// useful to get the best rated hotel out of the available hotels
+        public Func<List<int>,int> GetMaximum= (arr) => {
+            return arr.Max();
         };
     }
 }
